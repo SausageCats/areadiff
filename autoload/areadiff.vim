@@ -4,8 +4,11 @@
 let s:txtarea1=''
 let s:txtarea2=''
 let s:catcmd_eof='CATCMDEOF'
-if exists('g:vdiff_diffcmd') | let s:vdiff_diffcmd = g:vdiff_diffcmd
-else                         | let s:vdiff_diffcmd = 'diff'
+if exists('g:areadiff_diffcmd') | let s:areadiff_diffcmd = g:areadiff_diffcmd
+else                            | let s:areadiff_diffcmd = 'diff'
+endif
+if exists('g:areadiff_colorscheme') | exe expand(g:areadiff_colorscheme)
+else                                | hi link areadiff_comment Comment
 endif
 
 
@@ -17,10 +20,10 @@ endif
 
 function! s:make_diffcmd() abort
   if s:txtarea1 == s:txtarea2
-    redraw | echohl Comment | echom 'Same text' | echohl None
+    redraw | echohl areadiff_comment | echom 'Same text' | echohl None
     return ''
   endif
-  let cmd = s:vdiff_diffcmd .  " <(cat <<'" . s:catcmd_eof . "'\n". s:txtarea1 . "\n" . s:catcmd_eof . "\n) <(cat <<'" . s:catcmd_eof . "'\n". s:txtarea2 . "\n" . s:catcmd_eof . "\n)"
+  let cmd = s:areadiff_diffcmd .  " <(cat <<'" . s:catcmd_eof . "'\n". s:txtarea1 . "\n" . s:catcmd_eof . "\n) <(cat <<'" . s:catcmd_eof . "'\n". s:txtarea2 . "\n" . s:catcmd_eof . "\n)"
   return cmd
 endfunction
 
@@ -106,7 +109,7 @@ endfunction
 "         execute ':redir! > ' . tempfile2
 "           silent! echon s:txtarea2."\n"
 "         redir END
-"         let cmd = '! '. g:vdiff_diffcmd . ' ' . tempfile1 . ' ' . tempfile2
+"         let cmd = '! '. g:areadiff_diffcmd . ' ' . tempfile1 . ' ' . tempfile2
 "         exe cmd
 "         call delete(expand(tempfile1))
 "         call delete(expand(tempfile2))
